@@ -1,0 +1,70 @@
+/*
+You are given an integer array matches where matches[i] = [winneri, loseri] indicates that the player winneri defeated player loseri in a match.
+
+Return a list answer of size 2 where:
+
+answer[0] is a list of all players that have not lost any matches.
+answer[1] is a list of all players that have lost exactly one match.
+The values in the two lists should be returned in increasing order
+
+Input: matches = [[1,3],[2,3],[3,6],[5,6],[5,7],[4,5],[4,8],[4,9],[10,4],[10,9]]
+Output: [[1,2,10],[4,5,7,8]]
+Explanation:
+Players 1, 2, and 10 have not lost any matches.
+Players 4, 5, 7, and 8 each have lost one match.
+Players 3, 6, and 9 each have lost two matches.
+Thus, answer[0] = [1,2,10] and answer[1] = [4,5,7,8].*/
+
+class Solution {
+    public List<List<Integer>> findWinners(int[][] matches) {
+        //2-D list to return the answer
+        List<List<Integer>> answer =new ArrayList<>();
+        
+        //set of players that have not lost any matches
+        HashSet<Integer> winnerSet=new HashSet<>();
+        
+        //Map to store the players who have lost matches along with freq of lost matches
+        HashMap<Integer,Integer> map=new HashMap<>();
+        
+        for(int i=0;i<matches.length;i++)
+        {
+            int num=matches[i][1];
+            map.put(num,map.getOrDefault(num,0)+1);
+        }
+        
+        //list of players that lost exactly one match
+        List<Integer> oneLostList=new ArrayList<>();
+        
+        for(Map.Entry<Integer,Integer> e: map.entrySet())
+        {
+            int k=e.getKey();
+            int v=e.getValue();
+            if(v==1)//if player has freq of lost matches 1 means he has lost exactly 1 match
+            {
+                oneLostList.add(k);//add the player(key) to list
+            }    
+        }
+        
+        for(int i=0;i<matches.length;i++)
+        {
+            /*if the map(lost players) does not contain a player at winneri index
+             means that the player have not lost any match */
+            if(!map.containsKey(matches[i][0]))
+            {
+                winnerSet.add(matches[i][0]);//adding to set as duplicates won't considered
+            }
+        }
+        
+        //list of players that have not lost any matches
+        List<Integer> winnerList=new ArrayList<>(winnerSet);
+        
+        //sorting the lists in increasing order as instructed
+        Collections.sort(winnerList);
+        Collections.sort(oneLostList);
+        
+        //adding lists to return the final answer(2-D list)
+        answer.add(winnerList);
+        answer.add(oneLostList);
+        return answer;
+    }
+}
