@@ -1,0 +1,81 @@
+/*
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+Example 1:
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Example 2:
+Input: strs = [""]
+Output: [[""]]
+
+Example 3:
+Input: strs = ["a"]
+Output: [["a"]]
+*/
+
+//method-1 835 ms runtime
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> l=new ArrayList<>();
+        String c[]=strs.clone();
+        for(int i=0;i<c.length;i++)
+        {
+            // Converting input string to character array
+            char tempArray[] = c[i].toCharArray();
+    
+            // Sorting temp array using
+            Arrays.sort(tempArray);
+            c[i]=String.valueOf(tempArray);
+        }
+ 
+        HashSet<Integer> set=new HashSet<>();
+        for(int i=0;i<c.length;i++)
+        {
+            ArrayList <String> al=new ArrayList<>();
+            for(int j=0;j<c.length;j++)
+            {
+              if(c[i].equals(c[j]) && !set.contains(j))
+              {
+                al.add(strs[j]);
+                set.add(j);
+              }  
+            }
+            if(!al.isEmpty())
+             l.add(al);
+        }
+        return l;
+    }
+}
+
+//method-2 7ms runtime
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>> map=new HashMap<>();
+        
+        for(String s: strs)
+        {
+            // Converting input string to character array
+            char tempArray[] = s.toCharArray();
+    
+            // Sorting temp array using
+            Arrays.sort(tempArray);
+            
+            //make string again
+            String sortedString=String.valueOf(tempArray);
+            //or  String sortedString=new String(tempArray);
+
+            //if map does not contain sortedString as key...create new arraylist in it's value
+            if(!map.containsKey(sortedString)){
+                map.put(sortedString,new ArrayList<>());
+            }
+            //add the sortedString's original string in the value(arraylist) of map
+            // map.put(sortedString,(map.get(sortedString).add(s))); gives error
+            map.get(sortedString).add(s);//no else
+        }
+        
+        //in the end put all the values of map inside a arraylist and return
+        return new ArrayList<>(map.values());
+    }
+}
