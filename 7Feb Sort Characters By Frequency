@@ -1,0 +1,136 @@
+/*
+Given a string s, sort it in decreasing order based on the frequency of the characters.
+The frequency of a character is the number of times it appears in the string.
+
+Return the sorted string. If there are multiple answers, return any of them.
+
+Example 1:
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+
+Example 2:
+Input: s = "cccaaa"
+Output: "aaaccc"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+
+Example 3:
+Input: s = "Aabb"
+Output: "bbAa"
+Explanation: "bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+*/
+
+//method-1  379 ms
+class Solution {
+    public String frequencySort(String s) {
+        int ch[]=new int[26];
+        int CH[]=new int[26];
+        int num[]=new int[10];
+        String str="";
+
+        for(int i=0;i<s.length();i++)
+        {
+            if(s.charAt(i)>=97 && s.charAt(i)<=122)
+              ch[s.charAt(i)-'a']++;
+
+            // 48-57  
+            else if(s.charAt(i)>=48 && s.charAt(i)<=57)
+              num[s.charAt(i)-48]++;
+
+            else
+              CH[s.charAt(i)-'A']++;
+        }
+
+
+        int x,count=s.length();
+        for(int i=s.length();i>0;i--)//max freq can be string length only
+        {
+            for(int j=0;j<26;j++)
+            {
+                // if(s.charAt(j)>=65 && s.charAt(j)<=90 && CH[s.charAt(j)-'A']==i)
+                if(CH[j]==i)
+                {
+                    x=0;
+                    while(x<i)
+                    {
+                        str=str+(char)(j+65);
+                        x+=1;
+                    }
+                    count-=i;
+                }
+
+                // if(s.charAt(j)>=97 && s.charAt(j)<=122 && ch[s.charAt(j)-'a']==i)
+                if(ch[j]==i)
+                {
+                    x=0;
+                    while(x<i)
+                    {
+                        str=str+(char)(j+97);
+                        x+=1;
+                    }
+                    count-=i;
+                }
+
+                if(j<10)
+                {
+                    if(num[j]==i)
+                    {
+                        x=0;
+                        while(x<i)
+                        {
+                            str=str+(char)(j+48);
+                            x+=1;
+                        }
+                    }
+                    count-=i;
+                }   
+            }//inner for loop ends here
+            if(count==0)
+                return str;
+        }//outer for loop ends here
+
+       
+        return str;
+    }
+}
+
+//method-2 12 ms runtime
+/*
+The logic is very similar to NO.347 and here we just use a map a count and according to the frequency to put it into the right bucket. 
+Then we go through the bucket to get the most frequently character and append that to the final stringbuilder.
+*/
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character,Integer> map=new HashMap<>();
+        for(char c:s.toCharArray())
+            map.put(c,map.getOrDefault(c,0)+1);
+
+        List<Character>[] bucket=new List[s.length()+1];
+        for(char key: map.keySet())
+        {
+            int frequency=map.get(key);
+            if(bucket[frequency]==null)
+               bucket[frequency]=new ArrayList<>();
+            bucket[frequency].add(key);   
+        }    
+
+        StringBuilder sb=new StringBuilder();
+        for(int pos=bucket.length-1;pos>=0;pos--)
+        {
+            if(bucket[pos]!=null)
+            {
+                for(char c:bucket[pos])
+                {
+                    for(int i=0;i<pos;i++)
+                    {
+                        sb.append(c);
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
