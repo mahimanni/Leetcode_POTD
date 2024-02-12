@@ -12,7 +12,11 @@ Input: nums = [2,2,1,1,1,2,2]
 Output: 2
 */
 
-//method-1
+//Initial methods- Bruteforce(TC:O(n^2) SC:O(1)), HashMap(TC:O(n) SC:O(n))
+//Used methods- Sorting , Bit manipulation , 
+
+//method-1 SORTING a)
+//TC:O(n log n) SC:O(log n)
 class Solution {
     public int majorityElement(int[] nums) {
         int n=nums.length;
@@ -23,5 +27,80 @@ class Solution {
             return nums[i];
         }
         return -1;
+    }
+}
+
+//method-1 b)
+class Solution {
+    public int majorityElement(int[] nums) {
+        int n=nums.length;
+        Arrays.sort(nums);
+
+        return nums[n/2];//when surely you have a majority element
+
+        //otherwise iterate through the whole nums and find how many times
+        //nums[n/2] is coming if more than n/2 then yes otherwise no
+    }
+}
+
+//method-2 BIT MANIPULATION
+//TC:O(n log c) SC:O(1)
+class Solution {
+    public int majorityElement(int[] nums) {
+        int n=nums.length, majorityElement=0;
+
+        for(int i=0;i<32;i++)//takes log c where c is 10^9(1e9)
+        {
+            int bit=1<<i;//mask
+            int bitCount=0;
+            for(int num:nums)
+            {
+                //extract the bit using and operation
+                if((num&bit)!=0)//that means ith bit was set
+                  bitCount++;
+            }
+            if(bitCount>n/2)
+                majorityElement|=bit;//build the ans using or operation
+                //majority ele will have that ith bit as set
+                //use that mask(bit) itself to put that speicific bit as set
+                //in the majority ele
+
+                //to make a bit set in your majority ele simply use a or operation
+        }
+        return majorityElement;
+    }
+}
+
+//method-3 Boyer Moore Voting Algorithm a)
+//TC:O(n) SC:O(1)
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count=0,majorityElement=-1;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(count==0)
+            {
+                majorityElement=nums[i];
+            }
+            if(nums[i]==majorityElement)count+=1;
+            else if(nums[i]!=majorityElement) count-=1;
+        }
+        return majorityElement;//when u surely have a majority element
+    }
+}
+
+//b) BEST OPTIMIZED Time 1 ms
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count=0,majorityElement=-1;
+        for(int num:nums)
+        {
+            if(count==0)
+            {
+                majorityElement=num;
+            }
+            count+=num==majorityElement?1:-1;
+        }
+        return majorityElement;//when u surely have a majority element
     }
 }
