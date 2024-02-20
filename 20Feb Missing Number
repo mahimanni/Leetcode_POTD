@@ -24,6 +24,25 @@ n == nums.length
 All the numbers of nums are unique.
 */
 
+//Bruteforce
+class Solution {
+    public int missingNumber(int[] nums) {
+        int n=nums.length;
+        int a[]=new int[n+1];
+        Arrays.fill(a,-1);
+        for(int i=0;i<n;i++)
+        {
+            a[nums[i]]=nums[i];
+        }
+        for(int i=0;i<=n;i++)
+        {
+            if(a[i]==-1)
+                return i;
+        }
+        return -1;
+    }
+}
+
 //Using array sorting TC:O(nlogn)  SC:O(1)
 class Solution {
     public int missingNumber(int[] nums) {
