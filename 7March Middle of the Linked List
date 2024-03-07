@@ -61,6 +61,8 @@ class Solution {
 }
 
 //method-2 By using slow and fast pointers
+Time complexity:O(n)
+Space complexity:O(1)
 Traversal: Move the fast pointer two steps at a time and the slow pointer one step at a time. 
 This ensures that when the fast pointer reaches the end of the list, the slow pointer will be at the middle node.
 
