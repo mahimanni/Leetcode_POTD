@@ -1,0 +1,136 @@
+/*
+Given head, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. 
+Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.
+
+Return true if there is a cycle in the linked list. Otherwise, return false.
+
+Example 1:
+Input: head = [3,2,0,-4], pos = 1
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
+
+Example 2:
+Input: head = [1,2], pos = 0
+Output: true
+Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
+
+Example 3:
+Input: head = [1], pos = -1
+Output: false
+Explanation: There is no cycle in the linked list.
+ 
+Constraints:
+The number of the nodes in the list is in the range [0, 104].
+-105 <= Node.val <= 105
+pos is -1 or a valid index in the linked-list.
+*/
+
+
+//method-1 Bruteforce
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null)
+            return false;
+        HashSet<ListNode> set=new HashSet<>();
+        
+        ListNode start=head;
+        while(start.next!=null)
+        {
+            if(set.contains(start))
+                return true;
+            set.add(start);
+            start=start.next;
+        }
+        return false;
+    }
+}
+
+//method-2 Using O(1) Constant space Iterative
+Time complexity:0(n)
+Space complexity:0(1)
+
+Floyd's Tortoise and Hare algorithm, which is a cycle detection algorithm for linked lists.
+Linked list is all about 5 pointers slow,fast ,prev,curr & dummy any the solution to every problem revloves in between these pointers
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null || head.next==null)
+            return false;
+        
+        ListNode slow=head;
+        ListNode fast=head;
+
+        while(fast.next!=null && fast.next.next!=null)
+        {
+            fast=fast.next.next;
+            slow=slow.next;
+
+            if(slow==fast)//there is a cycle
+            {
+                return true;
+            }
+        }
+        return false;
+        /*
+        If the fast pointer reaches the end of the list
+        (fast == NULL or fast->next == NULL),
+        it means there is no cycle, and the function returns false.
+        */
+    }
+}
+
+//method-3 Recursive
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if(head==null || head.next==null)
+            return false;
+        
+        return detectCycle(head,head.next);
+    }   
+
+    private boolean detectCycle(ListNode slow, ListNode fast)
+    { 
+        if(fast==null || fast.next==null)
+            return false;
+
+        if(slow==fast)
+            return true;
+
+        return detectCycle(slow.next, fast.next.next);
+    }
+}
