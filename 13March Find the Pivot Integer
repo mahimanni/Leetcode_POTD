@@ -25,6 +25,7 @@ Constraints:
 */
 
 //method-1 Two Pointers
+//TC:O(n) SC:O(1)
 class Solution {
     public int pivotInteger(int n) {
         if(n==1)
@@ -45,6 +46,7 @@ class Solution {
 }
 
 //method-2 Best way MATHS ⚡(Optimal)
+//TC:O(1) SC:O(1)
 class Solution {
     public int pivotInteger(int n) {
         int ans=(n*n+n)/2;
